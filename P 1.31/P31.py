@@ -1,27 +1,41 @@
 class P31:
     def make_change(self, charged, given):
-        if given < charged:
-            return "Insufficient amount given."
+        try:
+            charged = float(charged)
+            given = float(given)
+
+            if charged < 0 or given < 0:
+                raise ValueError("Amounts cannot be negative.")
+            
+            if given < charged:
+                return "Insufficient amount given."
+            
+            change = round(given - charged, 2)
+            denominations = {
+                "1000 pkr bill": 1000,
+                "500 pkr bill": 500,
+                "100 pkr bill": 100,
+                "50 pkr bill": 50,
+                "20 pkr bill": 20,
+                "10 pkr bill": 10,
+                "5 pkr coin": 5,
+                "2 pkr coin": 2,
+                "1 pkr coin": 1,
+                "0.5 paisa coin": 0.5
+            }
+            
+            result = {}
+            for name, value in denominations.items():
+                count = int(change // value)
+                if count > 0:
+                    result[name] = count
+                    change -= count * value
+            
+            return result
         
-        change = round(given - charged, 2)
-        denominations = {
-            "1000 bill": 1000,
-            "500 bill": 500,
-            "100 bill": 100,
-            "50 bill": 50,
-            "20 bill": 20,
-            "10 bill": 10,
-            "5 coin": 5,
-            "2 coin": 2,
-            "1 coin": 1,
-            "0.5 coin": 0.5
-        }
-        
-        result = {}
-        for name, value in denominations.items():
-            count = int(change // value)
-            if count > 0:
-                result[name] = count
-                change -= count * value
-        
-        return result
+        except ValueError as ve:
+            return f"ValueError: {ve}"
+        except TypeError:
+            return "TypeError: Inputs must be numbers."
+        except Exception as e:
+            return f"Unexpected Error: {e}"
