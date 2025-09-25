@@ -1,6 +1,8 @@
 class P31:
-    def __init__(self):
-        self.denominations = {
+    def __init__(self, charged, given):
+        self._charged = charged
+        self._given = given
+        self._denominations = {
             "1000 pkr bill": 1000,
             "500 pkr bill": 500,
             "100 pkr bill": 100,
@@ -13,21 +15,21 @@ class P31:
             "0.5 paisa coin": 0.5
         }
 
-    def make_change(self, charged, given):
+    def make_change(self):
         try:
-            charged = float(charged)
-            given = float(given)
+            self._charged = float(self._charged)
+            self._given = float(self._given)
 
-            if charged < 0 or given < 0:
+            if self._charged < 0 or self._given < 0:
                 raise ValueError("Amounts cannot be negative.")
 
-            if given < charged:
+            if self._given < self._charged:
                 return "Insufficient amount given."
 
-            change = round(given - charged, 2)
+            change = round(self._given - self._charged, 2)
 
             result = {}
-            for name, value in self.denominations.items():
+            for name, value in self._denominations.items():
                 count = int(change // value)
                 if count > 0:
                     result[name] = count
